@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../services/challenge_service.dart';
 
 /// This widget is not currently taking up the correct amount of space. It is inside of a `Row`
 /// inside the `ChallengePage` widget: make it take up half of the available space (without
@@ -14,14 +17,36 @@ import 'package:flutter/material.dart';
 /// - Do not modify the `ChallengeService` in any way
 /// - The button should increment the `ChallengeState.counter` when pressed
 /// - The up-to-date value of `ChallengeState.counter` should be displayed in a Text widget
-class Challenge2Widget extends StatefulWidget {
+
+// Convert to ConsumerWidget of Riverpod instead of a stateful widget
+class Challenge2Widget extends ConsumerWidget {
   const Challenge2Widget({super.key});
 
+/// - Not needed anymore
+  /*@override
+  State<Challenge2Widget> createState() => _Challenge2WidgetState();*/
+
   @override
-  State<Challenge2Widget> createState() => _Challenge2WidgetState();
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final counter = ref.watch(challengeService).counter;
+    final counterNotifier = ref.read(challengeService.notifier);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('You\'ve pressed the button: $counter times'),
+        MaterialButton(
+          onPressed: counterNotifier.incrementCounter,
+          child: const Text('Press me!'),
+        )
+      ],
+    );
+  }
 }
 
-class _Challenge2WidgetState extends State<Challenge2Widget> {
+/// - Also not needed any more
+/*class _Challenge2WidgetState extends State<Challenge2Widget> {
   int _counter = 0;
 
   void _onPressed() {
@@ -32,15 +57,7 @@ class _Challenge2WidgetState extends State<Challenge2Widget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text('You\'ve pressed the button: $_counter times'),
-        MaterialButton(
-          onPressed: _onPressed,
-          child: const Text('Press me!'),
-        )
-      ],
-    );
+    return Column();
+    ...
   }
-}
+}*/
